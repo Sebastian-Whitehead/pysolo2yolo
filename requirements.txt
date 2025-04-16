@@ -1,2 +1,3 @@
 # The default package dependencies
 -r ./requirements/base.txt
+PyYAML>=6.0
