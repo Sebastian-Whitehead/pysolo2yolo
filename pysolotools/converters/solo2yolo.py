@@ -67,7 +67,7 @@ class Solo2YoloConverter:
                     bbox.dimension[0],
                     bbox.dimension[1],
                 )
-                f.write(f"{bbox.labelId} {x} {y} {w} {h}\n")
+                f.write(f"{bbox.labelId-1} {x} {y} {w} {h}\n")
 
     @staticmethod
     def _process_instances(frame: Frame, idx, images_output, labels_output, data_root):
