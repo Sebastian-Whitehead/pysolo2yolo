@@ -2,8 +2,10 @@
 <p align="center">
 
 
-**The open-source tool for loading and analyzing Unity SOLO datasets**
+**The open-source tool for loading and analyzing Unity SOLO datasets **
 ---
+
+## THIS IS A FORK OF THE PYSOLOTOOLS LIBRARY BY UNITY WITH SMALL FIXES IN THE SOLO TO YOLO FUNCTIONALITY - THE MAJORITY OF LIBRARY IS UNCHANGED 
 
 [![PyPI version](https://github.com/pytest-dev/pytest-cov/actions/workflows/test.yml/badge.svg)](https://github.com/Unity-Technologies/pysolotools/actions)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
@@ -30,9 +32,7 @@ You can read more about SOLO schema [here](https://github.com/Unity-Technologies
 
 ## Installation
 
-```shell
-pip install pysolotools --index-url=https://artifactory.prd.it.unity3d.com/artifactory/api/pypi/pypi/simple
-```
+*Only installable manually and will likly only work with python 3.8*
 
 #### SOLO Dataset
 
