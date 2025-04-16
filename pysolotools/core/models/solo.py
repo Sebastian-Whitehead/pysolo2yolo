@@ -114,18 +114,25 @@ class DataFactory:
     def cast_annotation(cls, data):
         if isinstance(data, Annotation):
             return data
-
         if "@type" not in data.keys():
             raise Exception("No type provided in annotation")
-
         dtype = data["@type"]
         if dtype not in cls.annotation_switcher.keys():
             logger.info(
                 f"Unknown data type: {dtype}. Treating it as generic Annotation type."
             )
             return Annotation.from_dict(data)
+
         klass = cls.annotation_switcher[dtype]
-        return klass.from_dict(data)
+        if dtype == "boundingBox2D":
+            if "instances" not in data and "values" in data:
+                data["instances"] = data.pop("values")
+
+        try:
+            return klass.from_dict(data)
+        except Exception as e:
+            logger.error(f"Failed to cast {data} annotation: {e}")
+            return None
 
     @classmethod
     def cast_capture(cls, data):
