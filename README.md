@@ -19,6 +19,7 @@ It helps to perform following tasks:
 - Parse SOLO datasets generated with Unity Perception
 - Dataset iterables
 - Convert SOLO to [COCO format](https://cocodataset.org/#format-data)
+- Convert SOLO to Yolo format **NEW!!**
 - Compute common statistics
 
 You can read more about SOLO schema [here](https://github.com/Unity-Technologies/perception/blob/main/com.unity.perception/com.unity.perception/Documentation~/SoloSchema/Solo_Schema.md).
