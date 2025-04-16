@@ -2,6 +2,8 @@ import argparse
 import multiprocessing
 import shutil
 import sys
+import json
+import yaml
 from pathlib import Path
 
 from pysolotools.consumers import Solo
@@ -91,15 +93,54 @@ class Solo2YoloConverter:
 
         data_path = Path(self._solo.data_path)
 
+        Solo2YoloConverter.create_data_yaml(output_path, str(data_path))
+
         for idx, frame in enumerate(self._solo.frames()):
             self._pool.apply_async(
                 self._process_instances,
                 args=(frame, idx, images_output, labels_output, data_path),
             )
-
+        
         self._pool.close()
         self._pool.join()
 
+    @staticmethod
+    def create_data_yaml(output_path: str, solo_path: str):
+        """Create data.yaml file from annotation_definitions.json"""
+        base_path = Path(output_path)
+        
+        # Read annotation definitions
+        ann_def_path = Path(solo_path) / "annotation_definitions.json"
+        with open(ann_def_path, 'r') as f:
+            ann_def = json.load(f)
+        
+        # Extract class information from BoundingBox2DAnnotation
+        classes = None
+        for definition in ann_def.get("annotationDefinitions", []):
+            if definition.get("@type") == "type.unity.com/unity.solo.BoundingBox2DAnnotation":
+                # Sort by label_id to ensure correct order
+                specs = sorted(definition.get("spec", []), key=lambda x: x["label_id"])
+                classes = [item["label_name"] for item in specs]
+                break
+        
+        if not classes:
+            raise ValueError("No bounding box classes found in annotation definitions")
+        
+        # Format class names as a string representation of a list
+        class_names_str = str(classes).replace('"', "'")
+        
+        # Create data.yaml content as formatted string instead of using yaml.dump
+        data_content = f"""train: ./images
+val: ./images
+test: ./images
+
+nc: {len(classes)}
+names: {class_names_str}
+"""
+        
+        # Write data.yaml
+        with open(base_path / "data.yaml", 'w') as f:
+            f.write(data_content)
 
 def cli():
     parser = argparse.ArgumentParser(
